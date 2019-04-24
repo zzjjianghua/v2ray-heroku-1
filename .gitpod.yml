@@ -1,0 +1,27 @@
+image: xuiv:workspace-gitpod
+ports:
+  - port: 1080
+    onOpen: notify
+  - port: 1081
+    onOpen: notify
+  - port: 1082
+    onOpen: notify
+  - port: 6080
+    onOpen: notify
+  - port: 6081
+    onOpen: notify
+  - port: 6082
+    onOpen: notify
+  - port: 8080
+    onOpen: notify
+checkoutLocation: "go/src/github.com/xuiv/workspace-gitpod"
+workspaceLocation: "go/src/github.com/demo-apps/workspace-gitpod"
+tasks:
+  - init: >
+      go get -v ./... &&
+      go build -o app
+    command: >
+      ./app
+github:
+    prebuilds:
+        pullRequestsFromForks: true
