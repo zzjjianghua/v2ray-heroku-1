@@ -1,4 +1,3 @@
-image: xuiv:workspace-gitpod:latest
 ports:
   - port: 1080
     onOpen: notify
