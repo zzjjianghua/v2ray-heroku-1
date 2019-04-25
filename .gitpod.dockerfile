@@ -4,7 +4,7 @@ USER root
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN apt-get update \
-    && apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java firefox deluge deluge-gtk megatools fonts-droid-fallback fluxbox \
+    && apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java mousepad firefox deluge deluge-gtk megatools fonts-droid-fallback fluxbox \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # overwrite this env variable to use a different window manager
