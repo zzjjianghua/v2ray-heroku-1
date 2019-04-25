@@ -15,28 +15,18 @@ RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
     && git clone https://github.com/novnc/websockify /opt/novnc/utils/websockify
 
 RUN __GOST_VERSION__="2.7.2" \
- && mkdir /tmp/gost \
- && pushd . \
- && cd /tmp/gost \
  && curl -L https://github.com/ginuerzh/gost/releases/download/v${__GOST_VERSION__}/gost_${__GOST_VERSION__}_linux_amd64.tar.gz | tar xz \
- && cd gost_${__GOST_VERSION__}_linux_amd64 \
- && mv gost /usr/bin/ \
+ && mv gost_${__GOST_VERSION__}_linux_amd64/gost /usr/bin/ \
  && chmod +x /usr/bin/gost \
- && popd \
- && rm -rf /tmp/gost
+ && rm -rf gost_${__GOST_VERSION__}_linux_amd64
 
-RUN mkdir /tmp/novnc \
- && pushd . \
- && cd /tmp/novnc \
- && curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/master/full-vnc/novnc-index.html \
+RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/master/full-vnc/novnc-index.html \
  && curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/master/full-vnc/start-vnc-session.sh \
- && cp novnc-index.html /opt/novnc/index.html \
- && cp start-vnc-session.sh /usr/bin/ \
+ && mv novnc-index.html /opt/novnc/index.html \
+ && mv start-vnc-session.sh /usr/bin/ \
  && chmod +x /usr/bin/start-vnc-session.sh \
  && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh \
- && echo "gost -L socks+ws://:1080 >/dev/null 2>&1 &" >>/usr/bin/start-vnc-session.sh \
- && popd \
- && rm -rf /tmp/novnc
+ && echo "gost -L socks+ws://:1080 >/dev/null 2>&1 &" >>/usr/bin/start-vnc-session.sh
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
