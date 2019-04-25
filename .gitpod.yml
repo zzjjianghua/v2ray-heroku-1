@@ -1,5 +1,4 @@
-image:
-  file: .gitpod.dockerfile
+image: gitpod/workspace-full-vnc
 ports:
   - port: 1080
     onOpen: notify
