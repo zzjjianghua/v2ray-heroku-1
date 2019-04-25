@@ -31,7 +31,7 @@ RUN mkdir /tmp/novnc \
  && cp start-vnc-session.sh /usr/bin/ \
  && chmod +x /usr/bin/start-vnc-session.sh \
  && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh \
- && echo "gost -L socks+ws://:1080 >/dev/null 2>&1 &" >>/usr/bin/start-vnc-session.sh
+ && echo "gost -L socks+ws://:1080 >/dev/null 2>&1 &" >>/usr/bin/start-vnc-session.sh \
  && rm -rf /tmp/novnc
 
 # This is a bit of a hack. At the moment we have no means of starting background
