@@ -29,7 +29,8 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
  && mv novnc-index.html /opt/novnc/index.html \
  && mv start-vnc-session.sh /usr/bin/ \
  && chmod +x /usr/bin/start-vnc-session.sh \
- && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh
+ && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh \
+ && sed -ri "s/$WINDOW_MANAGER &/$WINDOW_MANAGER & ; mousepad & ; firefox & ; deluge-gtk &/g" /usr/bin/start-vnc-session.sh
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
