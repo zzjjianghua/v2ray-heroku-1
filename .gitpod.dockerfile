@@ -37,7 +37,7 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
 RUN echo "export DISPLAY=:0" >> ~/.bashrc
 RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> ~/.bashrc
 
-RUN echo "vvv=`pstree |grep gost`" >> ~/.bashrc
+RUN echo "vvv=\`pstree |grep gost\`" >> ~/.bashrc
 RUN echo "if [ \"\${vvv}\"x = \"\"x ]" >> ~/.bashrc
 RUN echo "then" >> ~/.bashrc
 RUN echo "  nohup gost-linux -L socks+ws://:1081 >/dev/null 2>&1 &" >> ~/.bashrc
