@@ -35,13 +35,13 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
 RUN echo "export DISPLAY=:0" >> ~/.bashrc
-RUN echo "[ ! -e /tmp/.X0-lock ] && (nohup /usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> ~/.bashrc
 
 RUN echo "vvv=\`pstree |grep gost\`" >> ~/.bashrc
 RUN echo "if [ \"\${vvv}\"x = \"\"x ]" >> ~/.bashrc
 RUN echo "then" >> ~/.bashrc
 RUN echo "  nohup gost-linux -L socks+ws://:1081 >/dev/null 2>&1 &" >> ~/.bashrc
 RUN echo "  nohup v2ray-linux -port 1082 -config /usr/bin/server.json >/dev/null 2>&1 &" >> ~/.bashrc
+RUN echo "[ ! -e /tmp/.X0-lock ] && (nohup /usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log) &" >> ~/.bashrc
 RUN echo "fi" >> ~/.bashrc
 
 ### checks ###
