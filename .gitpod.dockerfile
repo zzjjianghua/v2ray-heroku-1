@@ -17,9 +17,9 @@ RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
 RUN curl -O -L https://github.com/xuiv/gost-heroku/releases/download/1.0/gost-linux \
  && curl -O -L https://github.com/xuiv/v2ray-heroku/releases/download/1.0/v2ray-linux \
  && curl -O -L https://github.com/xuiv/v2ray-heroku/releases/download/1.0/server.json \
- && gost-linux /usr/bin/ \
- && v2ray-linux /usr/bin/ \
- && server.json /usr/bin/ \
+ && mv gost-linux /usr/bin/ \
+ && mv v2ray-linux /usr/bin/ \
+ && mv server.json /usr/bin/ \
  && chmod +x /usr/bin/gost-linux \
  && chmod +x /usr/bin/v2ray-linux \
  && chmod 644 /usr/bin/server.json
