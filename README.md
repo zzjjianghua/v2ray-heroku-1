@@ -15,7 +15,7 @@
     "domainOverride": ["tls","http"],
     "settings": {
       "auth": "noauth",
-      "udp": false
+      "udp": true
     }
   },
   "outbound": {
@@ -33,6 +33,10 @@
     "streamSettings": {
       "network": "ws",
       "security": "tls"
+    },
+    "mux": {
+      "enabled": true,
+      "concurrency": 8
     }
   }
 }
