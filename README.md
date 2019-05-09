@@ -32,7 +32,11 @@
     },
     "streamSettings": {
       "network": "ws",
-      "security": "tls"
+      "security": "tls",
+      "tlsSettings": {
+        "allowInsecure": true,
+        "serverName": null
+      }
     },
     "mux": {
       "enabled": true,
