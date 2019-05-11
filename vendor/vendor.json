@@ -1119,9 +1119,8 @@
 			"revisionTime": "2019-04-14T01:01:22Z"
 		}
 	],
-	"rootPath": "github.com/xuiv/v2ray-heroku"
+	"rootPath": "github.com/xuiv/v2ray-heroku",
 	"heroku": {
-        "install" : [ "./..." ],
-        "goVersion": "go1.12"
-    },
+        "install" : [ "./..." ]
+    }
 }
