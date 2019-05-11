@@ -4,7 +4,7 @@ applications:
    memory: 128M
    disk_quota: 64M
    env:
-     GOVERSION: go1.11
+     GOVERSION: go1.12
      GOPACKAGENAME: github.com/xuiv/v2ray-heroku
 properties:
   logger_endpoint:
