@@ -1121,6 +1121,6 @@
 	],
 	"rootPath": "github.com/xuiv/v2ray-heroku",
 	"heroku": {
-        "sync" : false
-    }
+        	"sync" : false
+    	}
 }
