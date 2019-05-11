@@ -1,6 +1,6 @@
 package main
 
-//go:generate go run $GOPATH/src/v2ray.com/core/common/errors/errorgen/main.go -pkg main -path Main
+//go:generate errorgen
 
 import (
 	"flag"
@@ -8,24 +8,63 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"strings"
-	"strconv"
 	"syscall"
 
 	"v2ray.com/core"
 	"v2ray.com/core/common/platform"
+	_ "v2ray.com/core/infra/conf/command"
+	"v2ray.com/core/infra/control"
 	"v2ray.com/core/main/confloader"
-	_ "github.com/xuiv/v2ray-heroku/distro/all"
+	_ "v2ray.com/core/main/distro/all"
 )
 
 var (
-	listenPort = flag.String("port", "", "Listen port for proxy.")
+	isctl      = flag.Bool("ctl", false, "change to v2rayctl.")
 	configFile = flag.String("config", "", "Config file for V2Ray.")
 	version    = flag.Bool("version", false, "Show current version of V2Ray.")
 	test       = flag.Bool("test", false, "Test config file only, without launching V2Ray server.")
 	format     = flag.String("format", "json", "Format of input file.")
-	plugin     = flag.Bool("plugin", false, "True to load plugins.")
 )
+
+func getCommandName() string {
+	if len(os.Args) > 2 {
+		return os.Args[2]
+	}
+	return ""
+}
+
+func ctlmain() {
+	name := getCommandName()
+	cmd := control.GetCommand(name)
+	if cmd == nil {
+		fmt.Fprintln(os.Stderr, "Unknown command:", name)
+		fmt.Fprintln(os.Stderr)
+
+		fmt.Println("v2ctl <command>")
+		fmt.Println("Available commands:")
+		control.PrintUsage()
+		return
+	}
+
+	if err := cmd.Execute(os.Args[2:]); err != nil {
+		hasError := false
+		if err != flag.ErrHelp {
+			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Fprintln(os.Stderr)
+			hasError = true
+		}
+
+		for _, line := range cmd.Description().Usage {
+			fmt.Println(line)
+		}
+
+		if hasError {
+			os.Exit(-1)
+		}
+	}
+}
 
 func fileExists(file string) bool {
 	info, err := os.Stat(file)
@@ -91,30 +130,25 @@ func printVersion() {
 func main() {
 	flag.Parse()
 
+	if *isctl {
+		ctlmain()
+		return
+	}
+
+	env_port := os.Getenv("PORT")
+	fmt.Println(env_port)
+
 	printVersion()
 
 	if *version {
 		return
 	}
 
-	if *plugin {
-		if err := core.LoadPlugins(); err != nil {
-			fmt.Println("Failed to load plugins:", err.Error())
-			os.Exit(-1)
-		}
-	}
-
-	if len(*listenPort) > 0 {
-                port, err := strconv.ParseInt(*listenPort, 10, 32)
-                if err == nil {
-                        core.ListenPort = uint16(port)
-                }
-        }
-	
 	server, err := startV2Ray()
 	if err != nil {
 		fmt.Println(err.Error())
-		os.Exit(-1)
+		// Configuration error. Exit with a special value to prevent systemd from restarting.
+		os.Exit(23)
 	}
 
 	if *test {
@@ -126,10 +160,14 @@ func main() {
 		fmt.Println("Failed to start", err)
 		os.Exit(-1)
 	}
+	defer server.Close()
 
-	osSignals := make(chan os.Signal, 1)
-	signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
+	// Explicitly triggering GC to remove garbage from config loading.
+	runtime.GC()
 
-	<-osSignals
-	server.Close()
+	{
+		osSignals := make(chan os.Signal, 1)
+		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
+		<-osSignals
+	}
 }

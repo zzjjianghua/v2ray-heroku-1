@@ -1,6 +1,8 @@
+// +build !confonly
+
 package command
 
-//go:generate go run $GOPATH/src/v2ray.com/core/common/errors/errorgen/main.go -pkg command -path App,Log,Command
+//go:generate errorgen
 
 import (
 	"context"
@@ -16,6 +18,7 @@ type LoggerServer struct {
 	V *core.Instance
 }
 
+// RestartLogger implements LoggerService.
 func (s *LoggerServer) RestartLogger(ctx context.Context, request *RestartLoggerRequest) (*RestartLoggerResponse, error) {
 	logger := s.V.GetFeature((*log.Instance)(nil))
 	if logger == nil {
