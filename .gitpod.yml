@@ -22,7 +22,7 @@ tasks:
       go get -v ./... &&
       go build -o app
     command: >
-      ./app -config server.json >/dev/null 2>&1 &
+      clear
 github:
     prebuilds:
         pullRequestsFromForks: true
