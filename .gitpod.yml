@@ -14,7 +14,7 @@ workspaceLocation: "go/src/github.com/xuiv/v2ray-heroku"
 tasks:
   - init: >
       go get -v ./... &&
-      GO111MODULE=off go build -o app
+      env GO111MODULE=off go build -o app
     command: >
       clear
 github:
