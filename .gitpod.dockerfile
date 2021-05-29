@@ -4,7 +4,7 @@ USER root
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN apt-get update \
-    && apt-get install -yq xvfb x11vnc xterm megatools fonts-droid-fallback fluxbox firefox \
+    && apt-get install -yq xvfb x11vnc xterm megatools fonts-droid-fallback fluxbox firefox aria2 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # overwrite this env variable to use a different window manager
@@ -17,12 +17,15 @@ RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
 RUN curl -O -L https://github.com/xuiv/gost-heroku/releases/download/1.01/gost-linux \
  && curl -O -L https://github.com/xuiv/v2ray-heroku/releases/download/1.01/v2ray-linux \
  && curl -O -L https://github.com/xuiv/v2ray-heroku/releases/download/1.01/server.json \
+ && curl -o - -L https://github.com/hyxf/webui/releases/download/1.0.0/webui-linux.gz | gunzip > webui-linux \
  && mv gost-linux /usr/bin/ \
  && mv v2ray-linux /usr/bin/ \
  && mv server.json /usr/bin/ \
+ && mv webui-linux /usr/bin/ \
  && chmod +x /usr/bin/gost-linux \
  && chmod +x /usr/bin/v2ray-linux \
- && chmod 644 /usr/bin/server.json
+ && chmod 644 /usr/bin/server.json \
+ && chmod +x /usr/bin/webui-linux
 
 RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/master/full-vnc/novnc-index.html \
  && curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/master/full-vnc/start-vnc-session.sh \
@@ -43,6 +46,8 @@ RUN echo "export PORT=1080" >> ~/.bashrc \
  && echo "if [ \"\${vvv}\"x = \"\"x ]" >> ~/.bashrc \
  && echo "then" >> ~/.bashrc \
  && echo "  nohup gost-linux -L quic+ws://:1081 >/dev/null 2>&1 &" >> ~/.bashrc \
+ && echo "  nohup aria2c --enable-rpc --rpc-listen-all --listen-port=8088 --enable-dht=true --dht-listen-port=8088 -D >/dev/null 2>&1 &" >> ~/.bashrc \
+ && echo "  nohup webui-linux --port 8080 >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  nohup v2ray-linux -config /usr/bin/server.json >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  [ ! -e /tmp/.X0-lock ] && (nohup /usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log >/dev/null 2>&1 &)" >> ~/.bashrc \
  && echo "fi" >> ~/.bashrc
