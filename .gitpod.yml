@@ -9,6 +9,8 @@ ports:
     onOpen: notify
   - port: 8080
     onOpen: notify
+  - port: 8088
+    onOpen: notify
 checkoutLocation: "go/src/github.com/xuiv/v2ray-heroku"
 workspaceLocation: "go/src/github.com/xuiv/v2ray-heroku"
 tasks:
