@@ -4,10 +4,13 @@ USER root
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -yq xvfb x11vnc xterm megatools fonts-droid-fallback fluxbox firefox lxterminal pcmanfm mousepad vim-nox emacs-nox aria2 deluge deluge-gtk \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq language-pack-zh-hans-base xvfb x11vnc xterm megatools fonts-droid-fallback fonts-wqy-microhei fluxbox blackbox firefox lxterminal pcmanfm mousepad vim-nox emacs-nox aria2 deluge deluge-gtk \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo 'Asia/Shanghai' >/etc/timezone
 
 # overwrite this env variable to use a different window manager
+ENV LANG="zh_CN.UTF-8" 
 ENV WINDOW_MANAGER="fluxbox"
 
 # Install novnc
@@ -33,12 +36,36 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
  && mv start-vnc-session.sh /usr/bin/ \
  && chmod +x /usr/bin/start-vnc-session.sh \
  && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh \
+ && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Gray \
+ && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Green \
+ && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Blue \
+ && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Purple \
+ && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Red \
  && sed -ri '/Automatically generated/a\   \[exec\] \(Xterm\) \{ x-terminal-emulator -T "Bash" -e /bin/bash --login\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
  && sed -ri '/Automatically generated/a\   \[exec\] \(LXterm\) \{lxterminal\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
  && sed -ri '/Automatically generated/a\   \[exec\] \(Filemanager\) \{pcmanfm\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
  && sed -ri '/Automatically generated/a\   \[exec\] \(Deluge\) \{deluge-gtk\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
  && sed -ri '/Automatically generated/a\   \[exec\] \(Mousepad\) \{mousepad\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
- && sed -ri '/Automatically generated/a\   \[exec\] \(Firefox\) \{firefox\} \<\>' /etc/X11/fluxbox/fluxbox-menu 
+ && sed -ri '/Automatically generated/a\   \[exec\] \(Firefox\) \{firefox\} \<\>' /etc/X11/fluxbox/fluxbox-menu \
+ && mv /etc/X11/blackbox/blackbox-menu /etc/X11/blackbox/blackbox-menu.orig \
+ && echo "[begin] (Menu)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exec] (Firefox) {firefox}" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exec] (Mousepad) {mousepad}" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exec] (Deluge) {deluge-gtk}" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exec] (Filemanager) {pcmanfm}" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exec] (LXterm) {lxterminal}" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [sep]" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [config] (Configuration)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [submenu] (Styles)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "      [stylesdir] (/usr/share/blackbox/styles)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [end]" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [workspaces] (Workspaces)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [sep]" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [reconfig] (Reconfigure)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [restart] (Restart)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "   [exit] (Exit)" >> /etc/X11/blackbox/blackbox-menu \
+ && echo "[end]" >> /etc/X11/blackbox/blackbox-menu
+ 
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
