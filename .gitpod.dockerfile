@@ -4,7 +4,7 @@ USER root
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN add-apt-repository ppa:no1wantdthisname/ppa && apt-get update && apt-get -y upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -yq language-pack-zh-hans-base xvfb x11vnc xterm megatools fonts-droid-fallback fonts-wqy-microhei fluxbox blackbox firefox lxterminal pcmanfm mousepad vim-nox emacs-nox aria2 \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq language-pack-zh-hans-base xvfb x11vnc xterm megatools fonts-droid-fallback fonts-wqy-microhei fluxbox blackbox firefox firefox-locale-zh-hans lxterminal pcmanfm mousepad vim-nox emacs-nox aria2 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' >/etc/timezone
@@ -85,6 +85,7 @@ RUN echo "export PORT=1080" >> ~/.bashrc \
  && echo "  pushd /tmp && curl -O -L https://raw.githubusercontent.com/xuiv/xuiv.github.io/master/aria2.conf && bash <(curl -fsSL git.io/tracker.sh) && popd" >> ~/.bashrc \
  && echo "  nohup aria2c --dir /mnt --enable-rpc --rpc-listen-all --listen-port=8088 --enable-dht=true --dht-listen-port=8088 -c --conf-path=/tmp/aria2.conf -D >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  nohup webui-linux --port 8080 >/dev/null 2>&1 &" >> ~/.bashrc \
+ && echo "  rm -rf ~/.mozilla && curl -o - -L https://raw.githubusercontent.com/xuiv/xuiv.github.io/master/firefox.tar.gz | tar -zx -C ~" >> ~/.bashrc \
  && echo "  nohup v2ray-linux -config /usr/bin/server.json >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  [ ! -e /tmp/.X0-lock ] && (nohup /usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log >/dev/null 2>&1 &)" >> ~/.bashrc \
  && echo "fi" >> ~/.bashrc
