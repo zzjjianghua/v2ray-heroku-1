@@ -6,7 +6,7 @@ USER root
 RUN add-apt-repository ppa:no1wantdthisname/ppa && apt-get update && apt-get -y upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq language-pack-zh-hans-base xvfb x11vnc xterm megatools \
     fonts-droid-fallback fonts-wqy-microhei fluxbox blackbox firefox firefox-locale-zh-hans firefox-geckodriver lxterminal \
-    pcmanfm mousepad vim-nox emacs-nox aria2 python3-pip python3-dev \
+    pcmanfm mousepad vim-nox emacs-nox aria2 python3-pip python3-dev python3-sockify python3-selenium \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' >/etc/timezone
@@ -72,14 +72,10 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
  && echo "   [exit] (Exit)" >> /etc/X11/blackbox/blackbox-menu \
  && echo "[end]" >> /etc/X11/blackbox/blackbox-menu
  
-USER gitpod
-
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
-RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir selenium \
- && echo "export PORT=1080" >> ~/.bashrc \
+RUN echo "export PORT=1080" >> ~/.bashrc \
  && echo "export DISPLAY=:0" >> ~/.bashrc \
  && echo "" >> ~/.bashrc \
  && echo "vvv=\`pstree |grep gost\`" >> ~/.bashrc \
