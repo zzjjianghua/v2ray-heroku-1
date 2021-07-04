@@ -37,6 +37,7 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
  && mv novnc-index.html /opt/novnc/index.html \
  && mv start-vnc-session.sh /usr/bin/ \
  && chmod +x /usr/bin/start-vnc-session.sh \
+ && sed -ri "s/launch.sh/novnc_proxy/g" /usr/bin/start-vnc-session.sh \
  && sed -ri "s/1920x1080/1366x830/g" /usr/bin/start-vnc-session.sh \
  && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Gray \
  && sed -ri "s/Bitstream Vera Sans-9/WenQuanYi Micro Hei Mono-10/g" /usr/share/blackbox/styles/Green \
