@@ -75,11 +75,14 @@ RUN curl -O -L https://raw.githubusercontent.com/gitpod-io/workspace-images/mast
  && echo "   [exit] (Exit)" >> /etc/X11/blackbox/blackbox-menu \
  && echo "[end]" >> /etc/X11/blackbox/blackbox-menu
  
+USER gitpod
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
-RUN echo "export PORT=1080" >> ~/.bashrc \
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir selenium \
+ && echo "export PORT=1080" >> ~/.bashrc \
  && echo "export DISPLAY=:0" >> ~/.bashrc \
  && echo "" >> ~/.bashrc \
  && echo "vvv=\`pstree |grep gost\`" >> ~/.bashrc \
