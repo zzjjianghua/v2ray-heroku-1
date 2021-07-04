@@ -7,11 +7,12 @@ RUN add-apt-repository ppa:no1wantdthisname/ppa && apt-get update && apt-get -y 
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq language-pack-zh-hans-base xvfb x11vnc xterm megatools \
     fonts-droid-fallback fonts-wqy-microhei fluxbox blackbox firefox firefox-locale-zh-hans firefox-geckodriver lxterminal \
     pcmanfm mousepad vim-nox emacs-nox aria2 python3-pip python3-dev \
-    && pip install pip -U \
-    && pip install selenium \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' >/etc/timezone
+
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir selenium
 
 # overwrite this env variable to use a different window manager
 ENV LANG="zh_CN.UTF-8" 
