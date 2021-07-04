@@ -11,9 +11,6 @@ RUN add-apt-repository ppa:no1wantdthisname/ppa && apt-get update && apt-get -y 
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' >/etc/timezone
 
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir selenium
-
 # overwrite this env variable to use a different window manager
 ENV LANG="zh_CN.UTF-8" 
 ENV WINDOW_MANAGER="fluxbox"
