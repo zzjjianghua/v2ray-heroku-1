@@ -98,6 +98,6 @@ RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -q
     && { [ -z "$notOwnedFile" ] \
         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
 
-USER root
+USER gitpod
 
 RUN pip install selenium
