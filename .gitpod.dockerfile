@@ -89,8 +89,7 @@ RUN echo "export PORT=1080" >> ~/.bashrc \
  && echo "  nohup webui-linux --port 8080 >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  nohup v2ray-linux -config /usr/bin/server.json >/dev/null 2>&1 &" >> ~/.bashrc \
  && echo "  [ ! -e /tmp/.X0-lock ] && (nohup /usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log >/dev/null 2>&1 &)" >> ~/.bashrc \
- && echo "fi" >> ~/.bashrc \
- && rm -rf ~/.mozilla && curl -o - -L https://raw.githubusercontent.com/xuiv/xuiv.github.io/master/firefox.tar.gz | tar -zx -C ~
+ && echo "fi" >> ~/.bashrc
 
 ### checks ###
 # no root-owned files in the home directory
