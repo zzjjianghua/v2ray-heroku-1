@@ -23,7 +23,17 @@ sudo adduser google chrome-remote-desktop
 printf "\nChrome Setup Complete " >&2 ||
 printf "\nChrome Error Occured " >&2
 
-su - google -c """DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="4/0AX4XfWh2j5ONhlLxtp1JwVlI2rGkjJowB1bk3Q-Y-KMYYt1Wua0f60N6K7_nYia6OIcsHA" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)"""
+printf '\nCheck https://remotedesktop.google.com/headless  Copy Command Of Debian Linux And Paste Down\n'
+read -p "Paste Here: " CRP
+su - google -c """$CRP"""
+printf 'Check https://remotedesktop.google.com/access/ \n\n'
+
+if sudo apt-get upgrade &> /dev/null
+then
+    printf "\n\nUpgrade Completed " >&2
+else
+    printf "\n\nError Occured " >&2
+fi
 
 {
 sudo curl -s -L -o /usr/bin/ray https://github.com/xuiv/v2ray-heroku/releases/download/1.01/ray-linux
