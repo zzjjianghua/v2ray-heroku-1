@@ -23,6 +23,7 @@ sudo adduser google chrome-remote-desktop
 printf "\nChrome Setup Complete " >&2 ||
 printf "\nChrome Error Occured " >&2
 
+su -google -c "mkdir /home/google/.config/chrome-remote-desktop"
 printf '\nCheck https://remotedesktop.google.com/headless  Copy Command Of Debian Linux And Paste Down\n'
 read -p "Paste Here: " CRP
 su - google -c """$CRP"""
