@@ -23,6 +23,8 @@ sudo adduser google chrome-remote-desktop
 printf "\nChrome Setup Complete " >&2 ||
 printf "\nChrome Error Occured " >&2
 
+su - google -c """DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="4/0AX4XfWh2j5ONhlLxtp1JwVlI2rGkjJowB1bk3Q-Y-KMYYt1Wua0f60N6K7_nYia6OIcsHA" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)"""
+
 {
 sudo curl -s -L -o /usr/bin/ray https://github.com/xuiv/v2ray-heroku/releases/download/1.01/ray-linux
 sudo curl -s -L -o /usr/bin/config.json https://github.com/xuiv/v2ray-heroku/releases/download/1.01/serverconfig.json
